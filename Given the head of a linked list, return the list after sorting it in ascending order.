@@ -1,0 +1,29 @@
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        if (head == NULL || head->next == NULL)
+            return head;
+
+        vector<int> arr;
+        ListNode* curNode = head;
+
+        // Step 1: Store values in array
+        while (curNode) {
+            arr.push_back(curNode->val);
+            curNode = curNode->next;
+        }
+
+        // Step 2: Sort array
+        sort(arr.begin(), arr.end());
+
+        // Step 3: Rewrite linked list
+        curNode = head;
+        int idx = 0;
+        while (curNode) {
+            curNode->val = arr[idx++];
+            curNode = curNode->next;
+        }
+
+        return head;
+    }
+};
