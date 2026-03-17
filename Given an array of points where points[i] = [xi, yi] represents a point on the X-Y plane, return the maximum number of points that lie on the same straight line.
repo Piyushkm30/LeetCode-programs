@@ -1,0 +1,58 @@
+class Solution {
+    public int maxPoints(int[][] points) {
+        //tc- o(n^2)
+        //sc- o(n) for hashmaps
+
+        //M1: OPTIMAL
+
+        //WHY DO WE NEED TO CALCULATE GCD?
+        //bcz we need to normalize the slope values like 1/1 = 2/2 but are being treated differently bcz we have not normalized the ratio
+
+        int n = points.length;
+
+        if (n == 1)
+            return 1;
+
+        int maxlen = 0;
+
+        for (int i = 0; i < n; i++) {
+            HashMap<String, Integer> map = new HashMap<>();
+            for (int j = 0; j < n; j++) {
+                if(i==j) continue;
+
+                //y2-y1
+                int dy = points[j][1] - points[i][1];
+                //x2-x1
+                int dx = points[j][0] - points[i][0];
+
+                if (dx==0){
+                    dy=1; // vertical line
+                }
+                else if(dy==0){
+                    dx=1; // horizontal line
+                }
+                else{
+                    int gcd= gcdfxn(dy, dx);
+                    dy= dy/gcd;
+                    dx = dx/gcd;
+                }
+
+                String slope = dy + "_" + dx;
+
+                map.put(slope, map.getOrDefault(slope, 1) + 1);
+                maxlen = Math.max(maxlen, map.get(slope));
+
+            }
+        }
+
+        return maxlen;
+    }
+
+    static int gcdfxn(int a, int b){
+        //so gcd(a,b)== gcd(b, a%b)
+        if(b==0){
+            return a;
+        }
+        return gcdfxn(b, a%b);
+    }
+}
